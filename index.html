@@ -453,6 +453,316 @@
             color: var(--text-main);
         }
 
+        /* --- DIPLOMAS GALLERY --- */
+        .diplomas {
+            background: linear-gradient(180deg, rgba(242, 240, 235, 0.35) 0%, rgba(239, 230, 232, 0.45) 50%, rgba(242, 240, 235, 0.2) 100%);
+        }
+
+        .diplomas:focus {
+            outline: none;
+        }
+
+        .diplomas:focus-visible .diplomas__frame {
+            box-shadow: var(--shadow-soft), 0 0 0 2px var(--accent-dark);
+        }
+
+        .diplomas h2 {
+            margin-bottom: 0.75rem;
+        }
+
+        .diplomas__lead {
+            text-align: center;
+            max-width: 36rem;
+            margin: 0 auto 2.5rem;
+            font-size: 1.05rem;
+        }
+
+        .diplomas__viewer {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .diplomas__frame {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-soft), 0 0 0 1px rgba(166, 142, 148, 0.12);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        /* Фиксированный «холст»: при смене слайда размеры не меняются */
+        .diplomas__main {
+            position: relative;
+            width: 100%;
+            height: clamp(280px, 48vh, 520px);
+            min-height: 280px;
+            background: #faf8f5;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .diplomas__zoom {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            border: none;
+            background: transparent;
+            border-radius: inherit;
+            cursor: zoom-in;
+        }
+
+        .diplomas__zoom:focus {
+            outline: none;
+        }
+
+        .diplomas__zoom:focus-visible {
+            box-shadow: inset 0 0 0 2px var(--accent-dark);
+        }
+
+        .diplomas__main img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            transition: opacity 0.45s ease;
+        }
+
+        .diplomas__main img.diplomas__img--leaving {
+            opacity: 0;
+        }
+
+        /* Полноэкранный просмотр */
+        .diploma-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: block;
+            padding: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .diploma-lightbox[hidden] {
+            display: none !important;
+        }
+
+        .diploma-lightbox.is-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .diploma-lightbox__backdrop {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: rgba(20, 18, 16, 0.92);
+            cursor: zoom-out;
+        }
+
+        .diploma-lightbox__close {
+            position: absolute;
+            top: max(0.75rem, env(safe-area-inset-top));
+            right: max(0.75rem, env(safe-area-inset-right));
+            z-index: 4;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .diploma-lightbox__close:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .diploma-lightbox__close:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .diploma-lightbox__stage {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 3.25rem;
+            pointer-events: none;
+        }
+
+        .diploma-lightbox__stage .diploma-lightbox__image {
+            pointer-events: auto;
+            max-width: 100%;
+            max-height: calc(100vh - 2rem);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            box-shadow: 0 8px 48px rgba(0, 0, 0, 0.45);
+        }
+
+        .diploma-lightbox__nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            pointer-events: auto;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .diploma-lightbox__nav--prev {
+            left: max(0.5rem, env(safe-area-inset-left));
+        }
+
+        .diploma-lightbox__nav--next {
+            right: max(0.5rem, env(safe-area-inset-right));
+        }
+
+        .diploma-lightbox__nav:hover {
+            background: rgba(255, 255, 255, 0.28);
+        }
+
+        .diploma-lightbox__nav:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .diploma-lightbox__nav svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        @media (max-width: 500px) {
+            .diploma-lightbox__stage {
+                padding: 0 0.15rem;
+            }
+        }
+
+        .diplomas__btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text-main);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .diplomas__btn:hover {
+            background: var(--text-main);
+            color: #fff;
+        }
+
+        .diplomas__btn:focus-visible {
+            outline: 2px solid var(--accent-dark);
+            outline-offset: 2px;
+        }
+
+        .diplomas__btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .diplomas__btn--prev {
+            left: 0.75rem;
+        }
+
+        .diplomas__btn--next {
+            right: 0.75rem;
+        }
+
+        .diplomas__thumbs {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0.25rem 0;
+        }
+
+        .diplomas__thumb {
+            flex: 0 0 auto;
+            width: 88px;
+            height: 88px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: var(--bg-card);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            padding: 0;
+        }
+
+        .diplomas__thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .diplomas__thumb:hover,
+        .diplomas__thumb:focus-visible {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .diplomas__thumb.is-active {
+            border-color: var(--accent-dark);
+            box-shadow: 0 4px 16px rgba(166, 142, 148, 0.35);
+        }
+
+        @media (max-width: 600px) {
+            .diplomas__btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .diplomas__btn--prev {
+                left: 0.35rem;
+            }
+
+            .diplomas__btn--next {
+                right: 0.35rem;
+            }
+
+            .diplomas__thumb {
+                width: 72px;
+                height: 72px;
+            }
+        }
+
         /* --- CONTACTS & FOOTER --- */
         .contacts {
             text-align: center;
@@ -821,6 +1131,44 @@
         </div>
     </section>
 
+    <!-- Дипломы и сертификаты -->
+    <section id="diplomas" class="section diplomas" aria-label="Документы об образовании" tabindex="0">
+        <div class="container">
+            <h2 class="fade-in-section" id="diplomas-block-title">Документы об образовании</h2>
+            <p class="diplomas__lead fade-in-section" id="diplomas-block-description">Сертификаты и дипломы, подтверждающие квалификацию</p>
+            <div class="diplomas__viewer fade-in-section">
+                <div class="diplomas__frame">
+                    <div class="diplomas__main" id="diploma-main-wrap">
+                        <button type="button" class="diplomas__zoom" id="diploma-open-lightbox" aria-label="Открыть документ на весь экран">
+                            <img id="diploma-main-img" src="assets/diplomas/5431832838924866242.jpg" alt="Документ об образовании" width="800" height="1000" loading="eager" decoding="async">
+                        </button>
+                    </div>
+                    <button type="button" class="diplomas__btn diplomas__btn--prev" id="diploma-prev" aria-label="Предыдущий документ">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <button type="button" class="diplomas__btn diplomas__btn--next" id="diploma-next" aria-label="Следующий документ">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
+                <div class="diplomas__thumbs" id="diploma-thumbs" role="tablist" aria-label="Превью документов"></div>
+            </div>
+        </div>
+    </section>
+
+    <div id="diploma-lightbox" class="diploma-lightbox" role="dialog" aria-modal="true" aria-label="Просмотр документа" hidden>
+        <div class="diploma-lightbox__backdrop" id="diploma-lb-backdrop"></div>
+        <button type="button" class="diploma-lightbox__close" id="diploma-lb-close" aria-label="Закрыть">&times;</button>
+        <div class="diploma-lightbox__stage">
+            <button type="button" class="diploma-lightbox__nav diploma-lightbox__nav--prev" id="diploma-lb-prev" aria-label="Предыдущий документ">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <img id="diploma-lightbox-img" class="diploma-lightbox__image" src="assets/diplomas/5431832838924866242.jpg" alt="" width="1200" height="1600" decoding="async">
+            <button type="button" class="diploma-lightbox__nav diploma-lightbox__nav--next" id="diploma-lb-next" aria-label="Следующий документ">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Contacts Section -->
     <section id="contacts" class="section contacts">
         <div class="container">
@@ -860,6 +1208,7 @@
             projectSlug: 'aksonova'
         });
         async function start() {
+            let diplomaGalleryItems = null;
             try {
                 // 2. Получаем страницу "home"
                 const page = await cms.getPage('home');
@@ -979,6 +1328,39 @@
                     });
                 }
 
+                // Блок дипломов (text + table)
+                const diplomas_block_title = page.text('diplomas-block/title');
+                if (diplomas_block_title) {
+                    const el = document.getElementById('diplomas-block-title');
+                    if (el) el.innerText = diplomas_block_title;
+                }
+                const diplomas_block_description = page.text('diplomas-block/description');
+                if (diplomas_block_description) {
+                    const el = document.getElementById('diplomas-block-description');
+                    if (el) el.innerText = diplomas_block_description;
+                }
+                const diplomas_block_diplomas = page.table('diplomas-block/diplomas');
+                if (diplomas_block_diplomas?.rows?.length) {
+                    const mapped = diplomas_block_diplomas.rows.map((row) => {
+                        if (!row) return null;
+                        const raw = row.image;
+                        let src = '';
+                        if (typeof raw === 'string' && raw.trim()) {
+                            src = raw.trim();
+                        } else if (raw && typeof raw === 'object') {
+                            const u = raw.url || raw.src;
+                            if (u) src = String(u).trim();
+                        }
+                        if (!src) return null;
+                        const title = row.title;
+                        const alt = (title && String(title).trim()) || 'Документ об образовании';
+                        return { src, alt };
+                    }).filter(Boolean);
+                    if (mapped.length) {
+                        diplomaGalleryItems = mapped;
+                    }
+                }
+
                 // Заголовок (text)
                 const contacts_title = page.text('contacts/title');
                 if (contacts_title) document.getElementById('contacts-title').innerText = contacts_title;
@@ -1019,6 +1401,11 @@
             } finally {
                 // Скрываем лоадер в любом случае (успех или ошибка)
                 document.getElementById('loader').classList.add('hidden');
+                const def = (typeof window !== 'undefined' && window.__DEFAULT_DIPLOMA_ITEMS) ? window.__DEFAULT_DIPLOMA_ITEMS : [];
+                const list = (diplomaGalleryItems && diplomaGalleryItems.length) ? diplomaGalleryItems : def;
+                if (typeof window !== 'undefined' && typeof window.initDiplomaGallery === 'function') {
+                    window.initDiplomaGallery(list);
+                }
             }
         }
 
@@ -1026,6 +1413,216 @@
     </script>
     <!-- Scripts -->
     <script>
+        window.__DEFAULT_DIPLOMA_ITEMS = [
+            { src: 'assets/diplomas/5431832838924866242.jpg', alt: 'Сертификат, документ 1' },
+            { src: 'assets/diplomas/5431832838924866243.jpg', alt: 'Сертификат, документ 2' },
+            { src: 'assets/diplomas/5465557493359961671.jpg', alt: 'Диплом, документ 3' },
+            { src: 'assets/diplomas/5465557493359961672.jpg', alt: 'Диплом, документ 4' }
+        ];
+
+        window.initDiplomaGallery = function (diplomaItems) {
+            const items = diplomaItems && diplomaItems.length ? diplomaItems : null;
+            if (!items || !items.length) {
+                const sec = document.getElementById('diplomas');
+                if (sec) sec.style.setProperty('display', 'none');
+                return;
+            }
+            const diplomasSection = document.getElementById('diplomas');
+            if (diplomasSection) diplomasSection.style.removeProperty('display');
+
+            const mainImg = document.getElementById('diploma-main-img');
+            const thumbWrap = document.getElementById('diploma-thumbs');
+            const btnPrev = document.getElementById('diploma-prev');
+            const btnNext = document.getElementById('diploma-next');
+            const openLbBtn = document.getElementById('diploma-open-lightbox');
+            const lightbox = document.getElementById('diploma-lightbox');
+            const lightboxImg = document.getElementById('diploma-lightbox-img');
+            const lbBackdrop = document.getElementById('diploma-lb-backdrop');
+            const lbClose = document.getElementById('diploma-lb-close');
+            const lbPrev = document.getElementById('diploma-lb-prev');
+            const lbNext = document.getElementById('diploma-lb-next');
+
+            if (!mainImg || !thumbWrap || !btnPrev || !btnNext) return;
+
+            let currentIndex = 0;
+            let diplomaAnimating = false;
+            let lightboxPreviousFocus = null;
+            const thumbEls = [];
+
+            const first = items[0];
+            mainImg.src = first.src;
+            mainImg.alt = first.alt;
+            if (lightboxImg) {
+                lightboxImg.src = first.src;
+                lightboxImg.alt = first.alt;
+            }
+
+            thumbWrap.innerHTML = '';
+
+            function isLightboxOpen() {
+                return lightbox && !lightbox.hasAttribute('hidden');
+            }
+
+            function syncLightboxToSlide() {
+                if (!lightboxImg || !isLightboxOpen()) return;
+                const d = items[currentIndex];
+                lightboxImg.src = d.src;
+                lightboxImg.alt = d.alt;
+            }
+
+            function openLightbox() {
+                if (diplomaAnimating || !lightbox || !lightboxImg) return;
+                lightboxPreviousFocus = document.activeElement;
+                const d = items[currentIndex];
+                lightboxImg.src = d.src;
+                lightboxImg.alt = d.alt;
+                lightbox.removeAttribute('hidden');
+                document.body.style.overflow = 'hidden';
+                requestAnimationFrame(() => {
+                    lightbox.classList.add('is-open');
+                });
+                document.addEventListener('keydown', onLightboxKeydown, true);
+                setTimeout(() => { if (lbClose) lbClose.focus(); }, 0);
+            }
+
+            function closeLightbox() {
+                if (!lightbox) return;
+                lightbox.classList.remove('is-open');
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', onLightboxKeydown, true);
+                setTimeout(() => {
+                    lightbox.setAttribute('hidden', '');
+                    if (lightboxPreviousFocus && typeof lightboxPreviousFocus.focus === 'function') {
+                        try { lightboxPreviousFocus.focus(); } catch (err) { /* empty */ }
+                    }
+                    lightboxPreviousFocus = null;
+                }, 300);
+            }
+
+            function onLightboxKeydown(e) {
+                if (!lightbox || lightbox.hasAttribute('hidden')) return;
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    goTo(currentIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    goTo(currentIndex + 1);
+                }
+            }
+
+            items.forEach((item, i) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'diplomas__thumb' + (i === 0 ? ' is-active' : '');
+                b.setAttribute('role', 'tab');
+                b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+                b.setAttribute('aria-label', 'Показать документ ' + (i + 1) + ' из ' + items.length);
+                b.innerHTML = '<img src="' + item.src + '" alt="" width="88" height="88" loading="lazy" decoding="async">';
+                b.addEventListener('click', () => goTo(i));
+                thumbWrap.appendChild(b);
+                thumbEls.push(b);
+            });
+
+            function updateThumbs() {
+                thumbEls.forEach((el, i) => {
+                    el.classList.toggle('is-active', i === currentIndex);
+                    el.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
+                });
+            }
+
+            function goTo(next) {
+                const n = (next + items.length) % items.length;
+                if (n === currentIndex || diplomaAnimating) return;
+
+                if (isLightboxOpen() && lightboxImg) {
+                    const d = items[n];
+                    lightboxImg.src = d.src;
+                    lightboxImg.alt = d.alt;
+                }
+
+                diplomaAnimating = true;
+
+                function reveal() {
+                    requestAnimationFrame(() => {
+                        mainImg.classList.remove('diplomas__img--leaving');
+                    });
+                    updateThumbs();
+                    syncLightboxToSlide();
+                    diplomaAnimating = false;
+                }
+
+                function afterFadeOut() {
+                    currentIndex = n;
+                    const d = items[n];
+                    mainImg.src = d.src;
+                    mainImg.alt = d.alt;
+                    if (mainImg.decode) {
+                        mainImg.decode().then(reveal).catch(reveal);
+                    } else {
+                        mainImg.addEventListener('load', reveal, { once: true });
+                    }
+                }
+
+                function onEnd(e) {
+                    if (e.propertyName !== 'opacity') return;
+                    mainImg.removeEventListener('transitionend', onEnd);
+                    afterFadeOut();
+                }
+
+                mainImg.addEventListener('transitionend', onEnd);
+                mainImg.classList.add('diplomas__img--leaving');
+            }
+
+            btnPrev.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goTo(currentIndex - 1);
+            });
+            btnNext.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goTo(currentIndex + 1);
+            });
+
+            if (openLbBtn) {
+                openLbBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openLightbox();
+                });
+            }
+
+            if (lbBackdrop) {
+                lbBackdrop.addEventListener('click', () => closeLightbox());
+            }
+            if (lbClose) {
+                lbClose.addEventListener('click', () => closeLightbox());
+            }
+            if (lbPrev) {
+                lbPrev.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    goTo(currentIndex - 1);
+                });
+            }
+            if (lbNext) {
+                lbNext.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    goTo(currentIndex + 1);
+                });
+            }
+
+            document.getElementById('diplomas')?.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    goTo(currentIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    goTo(currentIndex + 1);
+                }
+            });
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             // Mobile Menu Toggle
             const burger = document.querySelector('.burger');
@@ -1063,7 +1660,6 @@
             document.querySelectorAll('.fade-in-section').forEach(section => {
                 observer.observe(section);
             });
-
             // Smooth Scroll — только для внутренних якорей (#about, #contacts и т.д.)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
