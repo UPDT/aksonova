@@ -8,10 +8,49 @@
     <meta name="author" content="Алёна Аксёнова">
     <title>Психолог Алёна Аксёнова | Бережная терапия</title>
     
-    <!-- Подключение шрифтов (Google Fonts) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Локальные шрифты -->
+    <link rel="preload" href="assets/fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/cormorant-garamond-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="preconnect" href="https://s3.coreless.site" crossorigin>
+    <link rel="preconnect" href="https://api.coreless.site">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="modulepreload" href="https://unpkg.com/coreless-lib/core.js?module">
+
+    <!-- Ранний запрос CMS: LCP-фото и preload до основного скрипта -->
+    <script type="module">
+        import { Coreless } from 'https://unpkg.com/coreless-lib/core.js?module';
+
+        const cms = new Coreless({
+            apiHost: 'https://api.coreless.site',
+            projectSlug: 'aksonova'
+        });
+
+        window.__pagePromise = cms.getPage('home').then((page) => {
+            const heroPhoto = page.image('hero/photo');
+            if (heroPhoto?.url) {
+                const preload = document.createElement('link');
+                preload.rel = 'preload';
+                preload.as = 'image';
+                preload.href = heroPhoto.url;
+                preload.fetchPriority = 'high';
+                document.head.appendChild(preload);
+
+                const applyHeroSrc = () => {
+                    const img = document.getElementById('hero-image');
+                    if (img) {
+                        if (img.getAttribute('src') !== heroPhoto.url) {
+                            img.src = heroPhoto.url;
+                        }
+                        return;
+                    }
+                    requestAnimationFrame(applyHeroSrc);
+                };
+                applyHeroSrc();
+            }
+            return page;
+        });
+    </script>
 
     <!-- Favicon (заглушка SVG) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
@@ -27,8 +66,8 @@
             --accent-dark: #A68E94;       /* Темный акцент для ховера */
             --accent-light: #EFE6E8;      /* Очень светлый розовый */
             
-            --font-serif: 'Cormorant Garamond', serif;
-            --font-sans: 'Manrope', sans-serif;
+            --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+            --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
             
             --container-width: 1200px;
             --header-height: 80px;
@@ -1056,8 +1095,7 @@
                     <a href="https://wa.me/38664123777" class="btn" target="_blank" id="hero-button">Записаться на консультацию</a>
                 </div>
                 <div class="hero__image-wrapper fade-in-section">
-                    <!-- Замените src на ваше фото -->
-                    <img src="" alt="Психолог Алёна Аксёнова" class="hero__image" id="hero-image">
+                    <img src="" alt="Психолог Алёна Аксёнова" class="hero__image" id="hero-image" fetchpriority="high" decoding="async" width="400" height="400">
                 </div>
             </div>
         </div>
@@ -1264,21 +1302,11 @@
         </div>
     </footer>
     <script type="module">
-        import { Coreless } from 'https://unpkg.com/coreless-lib/core.js?module';
-
-        // Настройка
-        const cms = new Coreless({
-            apiHost: 'https://api.coreless.site',
-            projectSlug: 'aksonova'
-        });
         async function start() {
             let diplomaGalleryItems = null;
             try {
-                // 2. Получаем страницу "home"
-                const page = await cms.getPage('home');
+                const page = await window.__pagePromise;
 
-                // 3. Используем данные
-                
                 // Заголовок (text)
                 const hero_title = page.text('hero/title');
                 if (hero_title) document.getElementById('title').innerText = hero_title;
@@ -1290,11 +1318,13 @@
                 // Текст кнопки hero — берём из contacts/contact (общий для всех CTA)
                 // См. contacts_contact ниже
 
-                // Фото на главной (image)
+                // Фото на главной — src задаётся ранним скриптом в <head>
                 const hero_foto_na_glavnoy = page.image('hero/photo');
-                if (hero_foto_na_glavnoy) {
+                if (hero_foto_na_glavnoy?.url) {
                     const img = document.getElementById('hero-image');
-                    img.src = hero_foto_na_glavnoy.url;
+                    if (img && img.getAttribute('src') !== hero_foto_na_glavnoy.url) {
+                        img.src = hero_foto_na_glavnoy.url;
+                    }
                 }
 
                 // Обо мне (text)
